@@ -1,0 +1,55 @@
+Ran command: `docker-compose ps`
+
+Here are the exact steps to run the pipeline and the dashboard:
+
+---
+
+### Step 1: Open Your Terminal & Navigate to the Project Folder
+```bash
+cd "/Users/shauryapratapsingh/Library/Mobile Documents/com~apple~CloudDocs/Project Alpha/enterprise-streaming-fraud-pipeline"
+```
+
+---
+
+### Step 2: Ensure Docker Infrastructure is Running
+```bash
+docker-compose up -d
+```
+*(Your 3 containers — Kafka, Zookeeper, and PostgreSQL — are currently active and healthy).*
+
+---
+
+### Step 3: Run the Pipeline (Open 3 Terminal Tabs)
+
+#### **Terminal Tab 1 — ML Consumer Engine:**
+Listens to incoming transactions from Kafka, scores them with the ML model ($<3\text{ ms}$), and logs them to PostgreSQL:
+```bash
+source venv/bin/activate
+python consumer_ml_engine.py
+```
+
+#### **Terminal Tab 2 — Live Transaction Producer:**
+Streams real-time domestic Indian financial transactions in $\text{₹}$ (INR) to Kafka:
+```bash
+source venv/bin/activate
+python producer.py
+```
+
+#### **Terminal Tab 3 — Command Operations Dashboard (`dashboard.py`):**
+Launches the executive monitoring UI in your browser:
+```bash
+source venv/bin/activate
+streamlit run dashboard.py
+```
+
+---
+
+### 🌐 Accessing the Dashboard:
+Once Terminal Tab 3 is running, open your web browser at:
+**`http://localhost:8501`**
+
+---
+
+### 🛑 To Stop the System When Finished:
+* In Terminals 1, 2, and 3: Press `Ctrl + C`
+* To shut down Docker background containers: `docker-compose down`
